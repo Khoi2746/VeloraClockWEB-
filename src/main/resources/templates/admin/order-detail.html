@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Order Detail | Nike Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ================= RESET & BASIC ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* ================= SIDEBAR (GIỮ NGUYÊN STYLE CỦA EM) ================= */
+        .sidebar {
+            width: 260px;
+            background-color: #111;
+            color: #fff;
+            padding: 30px 20px;
+            position: fixed;
+            height: 100%;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 50px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #333;
+        }
+
+        .logo-area img {
+            width: 50px;
+            filter: invert(1);
+        }
+
+        .logo-area h2 {
+            font-size: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .menu-items li {
+            margin-bottom: 15px;
+        }
+
+        .menu-items a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #aaa;
+            transition: all 0.3s ease;
+        }
+
+        .menu-items a:hover {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .bottom-link {
+            color: #aaa;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.3s;
+            font-size: 14px;
+        }
+
+        .bottom-link:hover {
+            color: #fff;
+        }
+
+        /* ================= MAIN CONTENT ================= */
+        .main-content {
+            margin-left: 260px;
+            padding: 40px 60px;
+            flex: 1;
+            width: 100%;
+        }
+
+        .header-title {
+            margin-bottom: 40px;
+        }
+
+        .header-title h1 {
+            font-size: 28px;
+            font-weight: 500;
+        }
+
+        .order-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .info-box h4 {
+            text-transform: uppercase;
+            font-size: 13px;
+            color: #757575;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* STATUS BADGES */
+        .badge-large {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-shipping {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .status-delivered {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* BUTTONS */
+        .status-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-status {
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-confirm {
+            background: #111;
+            color: #fff;
+        }
+
+        .btn-ship {
+            background: #007bff;
+            color: #fff;
+        }
+
+        .btn-cancel {
+            background: #fff;
+            color: #d43f3a;
+            border: 1px solid #d43f3a;
+        }
+
+        .btn-status:hover {
+            opacity: 0.8;
+        }
+
+        /* TABLE */
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .product-table th {
+            text-align: left;
+            padding: 15px;
+            border-bottom: 2px solid #eee;
+            color: #757575;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        .product-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        .product-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="logo-area">
+                <img src="/image/icon.png" alt="Nike Logo">
+                <h2>Admin Dashboard</h2>
+            </div>
+            <ul class="menu-items">
+                <li><a th:href="@{/admin/dashboard}"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a th:href="@{/admin/products}"><i class="fa-solid fa-box-open"></i> Products</a></li>
+                <li><a th:href="@{/admin/user/management}"><i class="fa-solid fa-users"></i> Users</a></li>
+                <li><a th:href="@{/admin/statistics}"><i class="fa-solid fa-chart-line"></i> Statistics</a></li>
+                <li><a th:href="@{/admin/orders}"><i class="fa-solid fa-file-invoice-dollar"></i> Orders</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-bottom">
+            <a th:href="@{/home}" class="bottom-link"><i class="fa-solid fa-house"></i> Return HomePage</a>
+            <a th:href="@{/logout}" class="bottom-link" style="color: #d43f3a;"><i
+                    class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="header-title">
+            <a th:href="@{/admin/orders}" style="color: #757575; font-size: 14px;"><i
+                    class="fa-solid fa-arrow-left"></i> Back to Orders</a>
+            <h1 style="margin-top: 10px;">Order Details <span th:text="'#' + ${order.id}"></span></h1>
+        </div>
+
+        <div class="order-card">
+            <div class="order-header">
+                <div class="info-box">
+                    <h4>Current Status</h4>
+                    <span th:class="'badge-large status-' + ${order.status.toLowerCase()}"
+                        th:text="${order.status}"></span>
+                </div>
+                <div class="status-actions">
+                    <form th:action="@{/admin/orders/update-status}" method="POST">
+                        <input type="hidden" name="orderId" th:value="${order.id}">
+
+                        <div th:if="${order.status == 'Pending'}">
+                            <button name="newStatus" value="Shipping" class="btn-status btn-confirm">Confirm &
+                                Ship</button>
+                            <button name="newStatus" value="Cancelled" class="btn-status btn-cancel">Cancel
+                                Order</button>
+                        </div>
+
+                        <div th:if="${order.status == 'Shipping'}">
+                            <button name="newStatus" value="Delivered" class="btn-status btn-ship">Mark as
+                                Delivered</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-box">
+                    <h4>Customer Information</h4>
+                    <p th:text="${order.user.firstName + ' ' + order.user.surname}"></p>
+                    <p style="font-weight: 400; color: #757575;" th:text="${order.user.email}"></p>
+                </div>
+                <div class="info-box">
+                    <h4>Shipping Address</h4>
+                    <p th:text="${order.address != null ? order.address : 'Chưa cập nhật địa chỉ'}"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-card">
+            <h4>Order Items</h4>
+            <table class="product-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${order.orderDetails}">
+                        <td style="display: flex; align-items: center; gap: 15px;">
+                            <img th:src="${item.product.imageUrl}" class="product-img"
+                                onerror="this.src='/image/default-shoe.png'">
+                            <span th:text="${item.product.name}" style="font-weight: 600;"></span>
+                        </td>
+                        <td th:text="${#numbers.formatDecimal(item.price, 0, 'POINT', 0, 'COMMA')} + '₫'"></td>
+                        <td th:text="${item.quantity}"></td>
+                        <td th:text="${#numbers.formatDecimal(item.price * item.quantity, 0, 'POINT', 0, 'COMMA')} + '₫'"
+                            style="font-weight: 600;"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="text-align: right; margin-top: 20px;">
+                <h2
+                    th:text="'Total Amount: ' + ${#numbers.formatDecimal(order.totalAmount, 0, 'POINT', 0, 'COMMA')} + '₫'">
+                </h2>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

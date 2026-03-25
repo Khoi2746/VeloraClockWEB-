@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/image/icon.png}">
+    <title>Nike Login - Enter Email</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* 1. SETUP CƠ BẢN */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+        body { background-color: #fff; height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding-top: 60px; }
+        
+        /* 2. KHUNG CHỨA FORM */
+        .login-wrapper { width: 100%; max-width: 460px; padding: 0 20px; }
+
+        /* 3. LOGO */
+        .logos { display: flex; gap: 20px; margin-bottom: 30px; }
+        .logos img { height: 20px; width: auto; display: block; }
+
+        /* 4. TEXT */
+        .login-title { font-size: 26px; font-weight: 700; line-height: 1.2; margin-bottom: 20px; max-width: 80%; }
+        .country-section { font-size: 14px; margin-bottom: 20px; color: #111; }
+        .country-section a { color: #757575; text-decoration: underline; margin-left: 5px; cursor: pointer; }
+
+        /* 5. FORM INPUT */
+        .form-group { margin-bottom: 20px; }
+        .input-wrapper { position: relative; }
+
+        input[type="text"] { width: 100%; padding: 16px; border: 1px solid #e5e5e5; border-radius: 4px; font-size: 16px; outline: none; transition: border-color 0.2s; }
+        input[type="text"]:focus { border-color: #111; }
+
+        /* VIỀN ĐỎ KHI LỖI */
+        .input-error { border-color: #d43f3a !important; }
+
+        /* CHỮ ĐỎ DƯỚI INPUT */
+        .error-message { color: #d43f3a; font-size: 12px; margin-top: 5px; }
+
+        /* 6. BUTTON */
+        .btn-container { display: flex; justify-content: flex-end; }
+        .btn-continue { background-color: #111; color: white; padding: 12px 24px; border-radius: 30px; font-weight: 700; border: none; cursor: pointer; font-size: 15px; }
+        .btn-continue:hover { background-color: #333; }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-wrapper">
+        <div class="logos">
+            <img src="/image/icon.png" alt="Nike">
+            <img src="/image/jordanIcon.png" alt="Jordan">
+        </div>
+
+        <div class="login-title">
+            Enter your email to join us or sign in.
+        </div>
+
+        <div class="country-section">
+            Vietnam <a href="#">Change</a>
+        </div>
+
+        <form th:action="@{/login/check-email}" th:object="${ChangeMail}" method="POST">
+
+    <div th:if="${errorMessage}" style="background: yellow; color: red; padding: 5px; margin-bottom: 10px; border: 1px solid red;">
+        DEBUG: <span th:text="${errorMessage}"></span>
+    </div>
+
+    <div class="form-group">
+        <div class="input-wrapper">
+            <input type="text" placeholder="Email*" th:field="*{email}"
+                   th:classappend="${#fields.hasErrors('email')} ? 'input-error' : ''"
+                   th:style="${errorMessage != null} ? 'border-color: #d43f3a !important;' : ''">
+        </div>
+
+        <div class="error-message" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        
+        <div class="error-message" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+    </div>
+
+    <div class="btn-container">
+        <button type="submit" class="btn-continue">Continue</button>
+    </div>
+</form>
+    </div>
+
+</body>
+</html>

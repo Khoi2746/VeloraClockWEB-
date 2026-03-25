@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/image/css/Cart.css}">
+    <title>Cart</title>
+</head>
+
+<body>
+    <header>
+        <div class="top-bar-wrapper">
+            <div class="inner-content top-bar-content">
+                <div class="jordan-logo">
+                    <img src="image/jordanIcon.png" alt="Jordan">
+                </div>
+                <div class="top-right-links">
+                    <th:block th:if="${session.loggedInUser != null and session.loggedInUser.roleId == 1}">
+                        <a href="http://localhost:8080/admin/dashboard" style="font-weight: bold;">ADMIN DASHBOARD</a>
+                    </th:block>|
+                    <a href="#">Find a Store</a>
+                    <span>|</span>
+                    <a href="#">Help</a>
+                    <span>|</span>
+
+                    <th:block th:if="${session.loggedInUser == null}">
+                        <a href="http://localhost:8080/login">Login</a>
+                        <span>|</span>
+                        <a th:href="@{/checkMail}">Sign In</a>
+                    </th:block>
+
+                    <th:block th:unless="${session.loggedInUser == null}">
+                        <div class="user-dropdown">
+                            <div class="user-name-wrapper">
+                                Hi, <span th:text="${session.loggedInUser.firstName}">Member</span>
+                                <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                            </div>
+                            <div class="dropdown-content">
+                                <a th:href="@{/profile}">Profile Detail</a>
+                                <hr style="border: 0; border-top: 1px solid #f0f0f0; margin: 0;">
+                                <a th:href="@{/change-password}">Change Password</a>
+                                <hr style="border: 0; border-top: 1px solid #f0f0f0; margin: 0;">
+                                <a th:href="@{/logout}" style="color: #d43f3a !important;">Log Out</a>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+
+        <nav class="main-nav-wrapper">
+            <div class="inner-content">
+                <a href="http://localhost:8080/home" class="nike-logo">
+                    <img src="image/icon.png" alt="Nike">
+                </a>
+
+                <div class="nav-links">
+
+                    <div class="nav-item">
+                        <a href="#">New & Featured</a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-inner">
+                                <div class="dropdown-column">
+                                    <h3>Featured</h3>
+                                    <ul>
+                                        <li><a href="http://localhost:8080/new-arrivals">New Arrivals</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav-backdrop"></div>
+
+                <div class="nav-actions">
+                    <div class="search-container">
+                        <i class="fa-solid fa-magnifying-glass search-icon-btn"></i>
+                        <input type="text" placeholder="Search">
+                    </div>
+
+                    <a href="http://localhost:8080/favorites" class="action-icon">
+                        <i class="fa-regular fa-heart"></i>
+                    </a>
+
+                    <a th:href="@{/customer/orders}" class="action-icon" title="Đơn hàng của tôi">
+                        <i class="fa-solid fa-box"></i>
+                    </a>
+
+                    <a href="http://localhost:8080/cart" class="action-icon">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="promo-bar-wrapper">
+            <div class="inner-content promo-content" style="display: block;">
+                <div class="promo-text">Free Standard Delivery & 30-Day Free Returns</div>
+                <div class="promo-subtext">
+                    <a href="#">Join Now</a>
+                    <a href="#">View Details</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- =================================================================== -->
+    <!-- Search Overlay -->
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-overlay-content">
+            <div class="search-top-bar">
+                <a href="#" class="overlay-logo">
+                    <img src="image/icon.png" alt="Nike">
+                </a>
+
+                <div class="big-search-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon-big"></i>
+                    <input type="text" placeholder="Search" id="bigSearchInput">
+                </div>
+
+                <button class="btn-cancel" onclick="closeSearch()">Cancel</button>
+            </div>
+
+            <div class="search-suggestions">
+                <p class="suggestion-title">Popular Search Terms</p>
+                <div class="tags-container">
+                    <a href="#" class="search-tag">luka 5</a>
+                    <a href="#" class="search-tag">air force 1</a>
+                    <a href="#" class="search-tag">jordan</a>
+                    <a href="#" class="search-tag">air max</a>
+                    <a href="#" class="search-tag">basketball shoes</a>
+                    <a href="#" class="search-tag">nike tech</a>
+                </div>
+            </div>
+        </div>
+        <div class="overlay-backdrop" onclick="closeSearch()"></div>
+    </div>
+
+    <!-- =================================================================== -->
+    <div class="container">
+        <div class="cart-wrapper">
+
+            <div class="cart-left">
+                <h2>Bag</h2>
+
+                <div th:if="${#lists.isEmpty(cartItems)}">
+                    <p class="empty-msg">There are no items in your bag.</p>
+                    <a href="/home" style="text-decoration: underline;">Shop Now</a>
+                </div>
+
+                <div th:each="item : ${cartItems}" class="cart-item">
+
+                    <div class="item-img">
+                        <img th:src="@{${item.product.imageUrl}}" alt="Product Image">
+                    </div>
+
+                    <div class="item-details">
+                        <div class="item-name" th:text="${item.product.name}">Tên sản phẩm</div>
+                        <div class="item-cat" th:text="${item.product.category}">Danh mục</div>
+
+                        <div class="quantity-wrapper">
+                            <span class="item-cat">Quantity:</span>
+
+                            <div class="qty-btn-group">
+                                <a th:href="@{'/cart/update/' + ${item.id} + '/decrease'}" class="btn-qty">
+                                    <i class="fa-solid fa-minus"></i>
+                                </a>
+
+                                <input type="text" th:value="${item.quantity}" readonly class="qty-input">
+
+                                <a th:href="@{'/cart/update/' + ${item.id} + '/increase'}" class="btn-qty">
+                                    <i class="fa-solid fa-plus"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="item-actions" style="display: flex; gap: 15px; margin-top: 10px;">
+                            <form th:action="@{/favorites/toggle}" method="post">
+                                <input type="hidden" name="productId" th:value="${item.product.id}" />
+                                <button type="submit"
+                                    style="background:none; border:none; cursor:pointer; font-size:14px; color: #757575;">
+                                    <i class="fa-regular fa-heart"></i> Favourite
+                                </button>
+                            </form>
+
+                            <form th:action="@{/cart/remove}" method="post">
+                                <input type="hidden" name="cartItemId" th:value="${item.id}" />
+                                <button type="submit"
+                                    style="background:none; border:none; cursor:pointer; font-size:14px; color: #757575;">
+                                    <i class="fa-regular fa-trash-can"></i> Remove
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="item-price"
+                        th:text="${#numbers.formatDecimal(item.product.price * item.quantity, 0, 'POINT', 0, 'COMMA')} + '₫'">
+                        Giá tiền
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="cart-right">
+                <h2>Summary</h2>
+                <div class="summary-box">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span th:text="${#numbers.formatDecimal(subtotal, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Estimated Delivery & Handling</span>
+                        <span>Free</span>
+                    </div>
+
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span th:text="${#numbers.formatDecimal(total, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</span>
+                    </div>
+
+                    <a th:href="@{/checkout}" class="btn-checkout"
+                        style="text-decoration: none; display: block; text-align: center;"
+                        th:classappend="${#lists.isEmpty(cartItems)} ? 'disabled' : ''">
+                        Member Checkout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- ======================================================================================================================================= -->
+
+
+    <footer class="nike-footer">
+        <div class="footer-container">
+
+            <!-- CỘT 1 -->
+            <div class="footer-column">
+                <h4>Find a Store</h4>
+                <ul>
+                    <li><a href="#">Become a Member</a></li>
+                    <li><a href="#">Sign Up for Email</a></li>
+                    <li><a href="#">Send Us Feedback</a></li>
+                    <li><a href="#">Student Discounts</a></li>
+                </ul>
+            </div>
+
+            <!-- CỘT 2 -->
+            <div class="footer-column">
+                <h4>Get Help</h4>
+                <ul>
+                    <li><a href="#">Order Status</a></li>
+                    <li><a href="#">Delivery</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">Payment Options</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <!-- CỘT 3 -->
+            <div class="footer-column">
+                <h4>About Nike</h4>
+                <ul>
+                    <li><a href="#">News</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Investors</a></li>
+                    <li><a href="#">Sustainability</a></li>
+                </ul>
+            </div>
+
+            <!-- CỘT 4 -->
+            <div class="footer-column">
+                <h4>Social</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 Nike, Inc. All Rights Reserved</span>
+            <div class="footer-links">
+                <a href="#">Guides</a>
+                <a href="#">Terms of Sale</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+    <script th:src="@{/image/js/Cart.js}"></script>
+</body>
+
+</html>

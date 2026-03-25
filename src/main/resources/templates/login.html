@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nike - Sign In</title>
+    <link rel="icon" type="image/png" th:href="@{/image/Icon.png}">
+    <link rel="stylesheet" th:href="@{/image/css/login.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo-box">
+             <img src="image/Icon.png" alt="">
+             <br>
+             <br>
+             <img src="image/VeloraIcon.jpg" alt="Velora">
+        </div>
+        
+        <h1>Enter your email to join us or sign in.</h1>
+
+        <div th:if="${error}" class="error-msg" th:text="${error}"></div>
+        <div th:if="${success}" class="error-msg" style="color: green;" th:text="${success}"></div>
+
+        <form th:action="@{/login}" method="POST">
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email Address" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            
+            <p class="footer-links" style="text-align: left; margin-bottom: 20px;">
+                By logging in, you agree to Nike's <a href="#">Privacy Policy</a> and <a href="#">Terms of Use</a>.
+            </p>
+
+            <button type="submit" class="btn-login">SIGN IN</button>
+        </form>
+
+        <div class="divider">
+            <span>OR CONTINUE WITH</span>
+        </div>
+
+        <div class="social-buttons">
+            <a href="/oauth2/authorization/google" class="btn-social btn-google">
+                <i class="fa-brands fa-google" style="color: #DB4437;"></i> Continue with Google
+            </a>
+
+            <a href="/oauth2/authorization/facebook" class="btn-social btn-facebook">
+                <i class="fa-brands fa-facebook-f"></i> Continue with Facebook
+            </a>
+        </div>
+
+        <p class="footer-links">
+            Not a Member? <a th:href="@{/checkMail}">Join Us.</a>
+        </p>
+    </div>
+</body>
+</html>

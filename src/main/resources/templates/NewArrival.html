@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/image/css/NewArrival.css}">
+    <title>New Arrivals</title>
+</head>
+
+<body>
+    <header>
+        <div class="top-bar-wrapper">
+            <div class="inner-content top-bar-content">
+                <div class="jordan-logo">
+                    <img th:src="@{/image/Icon.png}" alt="Icon">
+                </div>
+                <div class="top-right-links">
+                    <div class="nav-actions">
+                        <th:block th:if="${session.loggedInUser != null and session.loggedInUser.roleId == 1}">
+                            <a href="http://localhost:8080/admin/dashboard" style="font-weight: bold;">ADMIN
+                                DASHBOARD</a>
+                        </th:block>|
+                        <a href="#">Find a Store</a>
+                        <span>|</span>
+                        <a href="#">Help</a>
+                        <span>|</span>
+
+                        <th:block th:if="${session.loggedInUser == null}">
+                            <a href="http://localhost:8080/login">Login</a>
+                            <span>|</span>
+                            <a th:href="@{/checkMail}">Sign In</a>
+                        </th:block>
+
+                        <th:block th:unless="${session.loggedInUser == null}">
+                            <div class="user-dropdown">
+                                <div class="user-name-wrapper">
+                                    Hi, <span th:text="${session.loggedInUser.firstName}">Member</span>
+                                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                                </div>
+                                <div class="dropdown-content">
+                                    <a th:href="@{/profile}">Profile Detail</a>
+                                    <hr style="border: 0; border-top: 1px solid #f0f0f0; margin: 0;">
+                                    <a th:href="@{/change-password}">Change Password</a>
+                                    <hr style="border: 0; border-top: 1px solid #f0f0f0; margin: 0;">
+                                    <a th:href="@{/logout}" style="color: #d43f3a !important;">Log Out</a>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="main-nav-wrapper">
+                <div class="inner-content">
+                    <a href="http://localhost:8080/home" class="nike-logo">
+                        <img src="image/VeloraIcon.jpg" alt="Velora">
+                    </a>
+
+                    <div class="nav-links">
+
+                        <div class="nav-item">
+                            <a href="#">Trang Sản Phẩm</a>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-inner">
+                                    <div class="dropdown-column">
+                                        <h3>HOT</h3>
+                                        <ul>
+                                            <li><a href="http://localhost:8080/new-arrivals">Sản Phẩm Bán Chạy</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav-backdrop"></div>
+
+                    <div class="nav-actions">
+                        <div class="search-container">
+                            <i class="fa-solid fa-magnifying-glass search-icon-btn"></i>
+                            <input type="text" placeholder="Search">
+                        </div>
+
+                        <a href="http://localhost:8080/favorites" class="action-icon">
+                            <i class="fa-regular fa-heart"></i>
+                        </a>
+
+                        <a th:href="@{/customer/orders}" class="action-icon" title="Đơn hàng của tôi">
+                            <i class="fa-solid fa-box"></i>
+                        </a>
+
+                        <a href="http://localhost:8080/cart" class="action-icon">
+                            <i class="fa-solid fa-bag-shopping"></i>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+    </header>
+
+
+    <div class="page-header">
+
+        <h1 th:if="${searchKeyword != null}">
+            Search Result for "<span th:text="${searchKeyword}"></span>" (<span th:text="${totalItems}">0</span>)
+        </h1>
+        <h1 th:unless="${searchKeyword != null}">
+            New (<span th:text="${totalItems}">0</span>)
+        </h1>
+
+        <div class="header-actions">
+            <span id="btnHideFilter" class="clickable">
+                Hide Filters <i class="fa-solid fa-sliders"></i>
+            </span>
+        </div>
+
+    </div>
+
+    <div class="container">
+        <aside class="sidebar" id="mainSidebar">
+
+            <h3 style="margin-bottom: 15px; padding-left: 20px;">Lọc Sản Phẩm</h3>
+            <ul class="category-list">
+                <li>
+                    <a th:href="@{/products(category='Đồng Hồ Cơ', gender=${gender}, sort=${sort})}"
+                        th:classappend="${category == 'Đồng Hồ Cơ'} ? 'active' : ''">
+                        Đồng Hồ Cơ
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/products(category='Đồng Hồ Kim', gender=${gender}, sort=${sort})}"
+                        th:classappend="${category == 'Đồng Hồ Kim'} ? 'active' : ''">
+                        Đồng Hồ Kim
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/products(category='Đồng Hồ Thông Minh', gender=${gender}, sort=${sort})}"
+                        th:classappend="${category == 'Đồng Hồ Thông Minh'} ? 'active' : ''">
+                        Đồng Hồ Thông Minh
+                    </a>
+                </li>
+                <li th:if="${category != null}" class="clear-filter">
+                    <a th:href="@{/products(category=null, gender=${gender}, sort=${sort})}">
+                        <i class="fa-solid fa-xmark"></i> Xóa bộ lọc này
+                    </a>
+                </li>
+            </ul>
+
+            <div class="filter-section">
+
+                <div class="filter-group">
+                    <div class="filter-header">Gender <span class="arrow rotated"><i
+                                class="fa-solid fa-chevron-up"></i></span></div>
+                    <div class="filter-content collapsed">
+                        <form method="get" action="/products">
+
+                            <input type="hidden" name="category" th:value="${category}" th:if="${category != null}">
+                            <input type="hidden" name="sort" th:value="${sort}" th:if="${sort != null}">
+
+                            <label style="display: block; margin-bottom: 8px;">
+                                <input type="radio" name="gender" value="Nam" th:checked="${gender == 'Nam'}"> Nam
+                            </label>
+                            <label style="display: block; margin-bottom: 8px;">
+                                <input type="radio" name="gender" value="Nữ" th:checked="${gender == 'Nữ'}"> Nữ
+                            </label>
+
+                            <button type="submit" class="filter-apply-btn" style="margin-top: 10px;">Apply</button>
+
+                            <a th:if="${gender != null}"
+                                th:href="@{/products(category=${category}, gender=null, sort=${sort})}"
+                                style="display: block; margin-top: 10px; color: red; font-size: 0.9em; text-decoration: none;">
+                                <i class="fa-solid fa-xmark"></i> Xóa lọc giới tính
+                            </a>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-header">Shop By Price <span class="arrow rotated"><i
+                                class="fa-solid fa-chevron-up"></i></span></div>
+                    <div class="filter-content collapsed">
+
+                        <a th:href="@{/products(category=${category}, gender=${gender}, sort='price_desc')}"
+                            th:style="${sort == 'price_desc'} ? 'font-weight: bold; text-decoration: underline;' : ''">Price:
+                            High-Low</a>
+
+                        <a th:href="@{/products(category=${category}, gender=${gender}, sort='price_asc')}"
+                            th:style="${sort == 'price_asc'} ? 'font-weight: bold; text-decoration: underline;' : ''">Price:
+                            Low-High</a>
+
+                        <a th:href="@{/products(category=${category}, gender=${gender}, sort='newest')}"
+                            th:style="${sort == 'newest'} ? 'font-weight: bold; text-decoration: underline;' : ''">Newest</a>
+
+                        <a th:if="${sort != null}"
+                            th:href="@{/products(category=${category}, gender=${gender}, sort=null)}"
+                            style="display: block; margin-top: 10px; color: red; font-size: 0.9em; text-decoration: none;">
+                            <i class="fa-solid fa-xmark"></i> Xóa sắp xếp
+                        </a>
+
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+        <!-- ==================================================== -->
+
+        <main class="product-grid" id="productGrid">
+
+            <div class="product-card" th:each="product : ${products}">
+
+                <a th:href="@{/product/detail/{id}(id=${product.id})}">
+                    <div class="product-img-box">
+                        <img th:src="@{${#strings.trim(#strings.arraySplit(product.imageUrl, ',')[0])}}"
+                            alt="Product Image">
+                    </div>
+                </a>
+
+                <div class="product-info">
+                    <h3 th:text="${product.name}"></h3>
+
+                    <!-- <p th:text="${product.gender} + '\'s ' + ${product.category}"> 
+            </p> -->
+
+                    <p class="product-price"
+                        th:text="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')} + '₫'">
+                    </p>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+    <!-- =================================================================== -->
+    <!-- Search Overlay -->
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-overlay-content">
+            <div class="search-top-bar">
+                <a href="#" class="overlay-logo">
+                    <img src="image/icon.png" alt="Nike">
+                </a>
+
+                <div class="big-search-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon-big"></i>
+                    <input type="text" placeholder="Search" id="bigSearchInput">
+                </div>
+
+                <button class="btn-cancel" onclick="closeSearch()">Cancel</button>
+            </div>
+
+            <div class="search-suggestions">
+                <p class="suggestion-title">Popular Search Terms</p>
+                <div class="tags-container">
+                    <a href="#" class="search-tag">luka 5</a>
+                    <a href="#" class="search-tag">air force 1</a>
+                    <a href="#" class="search-tag">jordan</a>
+                    <a href="#" class="search-tag">air max</a>
+                    <a href="#" class="search-tag">basketball shoes</a>
+                    <a href="#" class="search-tag">nike tech</a>
+                </div>
+            </div>
+        </div>
+        <div class="overlay-backdrop" onclick="closeSearch()"></div>
+    </div>
+
+
+
+<!-- 1111 -->
+    <footer class="nike-footer">
+        <div class="footer-container">
+
+            <!-- CỘT 1 -->
+            <div class="footer-column">
+                <h4>Find a Store</h4>
+                <ul>
+                    <li><a href="#">Become a Member</a></li>
+                    <li><a href="#">Sign Up for Email</a></li>
+                    <li><a href="#">Send Us Feedback</a></li>
+                    <li><a href="#">Student Discounts</a></li>
+                </ul>
+            </div>
+
+            <!-- CỘT 2 -->
+            <div class="footer-column">
+                <h4>Get Help</h4>
+                <ul>
+                    <li><a href="#">Order Status</a></li>
+                    <li><a href="#">Delivery</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">Payment Options</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+<!-- New -->
+            <!-- CỘT 3 -->
+            <div class="footer-column">
+                <h4>About</h4>
+                <ul>
+                    <li><a href="#">News</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Investors</a></li>
+                    <li><a href="#">Sustainability</a></li>
+                </ul>
+            </div>
+
+            <!-- CỘT 4 -->
+            <div class="footer-column">
+                <h4>Social</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 VeloraClock, Inc. All Rights Reserved</span>
+            <div class="footer-links">
+                <a href="#">Guides</a>
+                <a href="#">Terms of Sale</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+    <script th:src="@{/image/js/NewArrival.js}"></script>
+</body>
+
+</html>
+
+<!-- Newwww -->
