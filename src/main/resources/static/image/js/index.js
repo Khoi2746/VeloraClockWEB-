@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
         smallSearchInput.addEventListener("click", openSearch);
     }
 
-
     // --- B. XỬ LÝ TÌM KIẾM (SEARCH) ---
     const bigSearchInput = document.getElementById('bigSearchInput');
     if (bigSearchInput) {
@@ -52,15 +51,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-
     // --- C. XỬ LÝ SLIDER VIDEO ---
-    // Khởi tạo slider ngay khi DOM load xong
     initSlider();
+
+    // --- D. XỬ LÝ BĂNG CHUYỀN SẢN PHẨM (MỚI THÊM) ---
+    initProductCarousel();
 });
 
 
 // ==========================================
-// 3. LOGIC SLIDER (Tách hàm cho gọn)
+// 3. LOGIC SLIDER VIDEO (HERO)
 // ==========================================
 
 const slides = document.querySelectorAll('.slide');
@@ -134,10 +134,61 @@ function initSlider() {
 
     // Chạy slide đầu tiên
     showSlide(0);
-    
+}
 
 
-    /* --- PRO MODE: ANTI-COPY & CREDIT PROTECTION --- */
+// ==========================================
+// 4. LOGIC BĂNG CHUYỀN SẢN PHẨM (TỐI ƯU HTML)
+// ==========================================
+function initProductCarousel() {
+    const slider = document.querySelector('.slider-container');
+    const track = document.getElementById('sliderTrack');
+    if (!slider || !track) return;
+
+    // 💡 BÍ KÍP Ở ĐÂY: Dùng JS để nhân bản toàn bộ sản phẩm và dán nối đuôi vào
+    const items = track.querySelectorAll('.product-item');
+    items.forEach(item => {
+        const clone = item.cloneNode(true); // Photocopy y chang
+        track.appendChild(clone); // Dán vào cuối băng chuyền
+    });
+
+    let isHovered = false;
+
+    // 1. TỰ ĐỘNG CUỘN
+    function autoScroll() {
+        if (!isHovered) {
+            slider.scrollLeft += 1.5; 
+            // Reset khi trượt hết nửa danh sách (Do JS đã x2 sản phẩm lên rồi)
+            if (slider.scrollLeft >= slider.scrollWidth / 2) {
+                slider.scrollLeft = 0;
+            }
+        }
+        requestAnimationFrame(autoScroll);
+    }
+    autoScroll();
+
+    // 2. DỪNG KHI HOVER BẰNG CHUỘT
+    slider.addEventListener('mouseenter', () => { isHovered = true; });
+    slider.addEventListener('mouseleave', () => { isHovered = false; });
+
+    // 3. DỪNG KHI CHẠM TAY (Màn hình cảm ứng)
+    slider.addEventListener('touchstart', () => { isHovered = true; }, { passive: true });
+    slider.addEventListener('touchend', () => { isHovered = false; });
+    slider.addEventListener('touchcancel', () => { isHovered = false; });
+
+    // 4. HỖ TRỢ LĂN CHUỘT / VUỐT TRACKPAD
+    slider.addEventListener('wheel', (e) => {
+        if (isHovered) {
+            e.preventDefault(); 
+            slider.scrollLeft += e.deltaY; 
+        }
+    }, { passive: false });
+}
+
+
+// ==========================================
+// 5. PRO MODE: ANTI-COPY & CREDIT PROTECTION
+// ==========================================
 (function(_0x2d8f, _0x4b39) {
     var _0x5a1d = function(_0x2a3b) {
         while (--_0x2a3b) {
@@ -190,6 +241,3 @@ var _0x4e2d = function(_0x2d8f05, _0x4b3955) {
         }
     });
 })();
-}
-
-

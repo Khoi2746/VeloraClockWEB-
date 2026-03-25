@@ -1,0 +1,156 @@
+* {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+        background-color: #24201d;
+        display: flex;
+        justify-content: center;
+        padding-top: 60px;
+}
+
+.login-container {
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+        text-align: center;
+}
+
+.logo-box {
+        margin-bottom: 30px;
+}
+
+.logo-box img {
+        height: 70px;
+}
+
+h1 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 25px;
+        text-align: left;
+        color: white;
+}
+
+.form-group {
+        margin-bottom: 15px;
+        text-align: left;
+}
+
+input {
+        width: 100%;
+        padding: 15px;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        font-size: 16px;
+        outline: none;
+}
+
+input:focus {
+        border-color: #111;
+}
+
+.btn-login {
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.498);
+        color: #fff;
+        padding: 16px;
+        border: none;
+        border-radius: 30px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        margin-top: 20px;
+}
+
+.btn-login:hover {
+        background-color: gray;
+}
+
+ /* Dòng kẻ ngang có chữ OR ở giữa */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 25px 0;
+            color: #ccc;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        .divider span {
+            padding: 0 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Container chứa 2 nút */
+        .social-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Style chung cho nút Social */
+        .btn-social {
+            width: 100%;
+            padding: 14px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }       
+
+        /* Nút Google (Trắng viền xám - Style sạch sẽ) */
+        .btn-google {
+            background-color: #df6c6c;
+            color: #111;
+        }
+        .btn-google:hover {
+            background-color: #df6c6cc7;
+        }
+
+        /* Nút Facebook (Xanh đặc trưng) */
+        .btn-facebook {
+            background-color: #1877f2;
+            color: #fff;
+            border-color: #1877f2;
+        }
+        .btn-facebook:hover {
+            background-color: #1565c0;
+        }
+        
+        .btn-social i {
+            font-size: 18px;
+        }
+
+.error-msg {
+        color: #d43f3a;
+        font-size: 14px;
+        margin-bottom: 15px;
+        text-align: left;
+}
+
+.footer-links {
+        margin-top: 25px;
+        font-size: 14px;
+        color: white;
+}
+
+.footer-links a {
+        color: gray;
+        text-decoration: underline;
+        font-weight: 600;
+}

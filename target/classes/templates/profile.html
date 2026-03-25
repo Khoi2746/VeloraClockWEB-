@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Member Profile - Nike</title>
+    <link rel="stylesheet" th:href="@{/image/css/style.css}">
+</head>
+
+<body>
+    <div class="container" th:object="${session.loggedInUser}">
+        <div class="header"><img th:src="@{/image/icon.png}" alt="Nike"></div>
+        <h1>Member Profile</h1>
+        <div class="info-group">
+            <div class="label">Email Address</div>
+            <div class="value" th:text="*{email}"></div>
+        </div>
+        <div class="info-group">
+            <div class="label">Full Name</div>
+            <div class="value" th:text="*{firstName} + ' ' + *{surname}"></div>
+        </div>
+        <div class="info-group">
+            <div class="label">Date of Birth</div>
+            <div class="value" th:text="*{dobDay} + '/' + *{dobMonth} + '/' + *{dobYear}"></div>
+        </div>
+        <div class="info-group">
+            <div class="label">Shopping Preference</div>
+            <div class="value" th:text="*{shoppingPreference}"></div>
+        </div>
+        <a href="/home" class="btn-black">Back to Shopping</a>
+        <div class="sub-link-wrapper">
+            <a th:href="@{/profile/edit}" class="sub-link">Edit Profile</a>
+        </div>
+    </div>
+</body>
+
+</html>

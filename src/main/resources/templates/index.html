@@ -134,21 +134,41 @@
     </section>
     <!-- =================================================================== -->
     <!-- Features -->
-    <section class="featured-section inner-content">
-        <div class="slider-container">
-  <div class="slider-track" id="sliderTrack">
-    <div class="product-item">
-      <h3>Sản phẩm 1</h3>
+    <section class="featured-section">
+    <div class="title-wrapper">
+        <h2 class="section-title">
+            SẢN PHẨM BÁN CHẠY 
+            <span class="hot-badge">HOT <i class="fa-solid fa-fire"></i></span>
+        </h2>
     </div>
-    <div class="product-item">
-      <h3>Sản phẩm 2</h3>
+    <div class="slider-container">
+        <div class="slider-track" id="sliderTrack">
+            
+            <div class="product-item" th:each="product : ${products}">
+                <a th:href="@{/product/detail/{id}(id=${product.id})}">
+                    <div class="product-img-box">
+                        <img th:src="@{${#strings.trim(#strings.arraySplit(product.imageUrl, ',')[0])}}" alt="Product Image">
+                    </div>
+                </a>
+                <div class="product-info-card">
+                    <h3 class="product-name" th:text="${product.name}">Tên sản phẩm</h3>
+                    <p class="product-cat" th:text="${product.gender} + '\'s ' + ${product.category}">Danh mục</p>
+                    <p class="product-price" th:text="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')} + '₫'">Giá tiền</p>
+                </div>
+            </div>
+            
+        </div>
     </div>
-    <div class="product-item">
-      <h3>Sản phẩm 3</h3>
-    </div>
-  </div>
-</div>
+</section>
+
+<!-- =====================Banner=============== -->
+</section>
+    <section class="promo-banner-section">
+        <a href="#" class="banner-container">
+            <img th:src="@{/image/banner.png}" alt="Banner Khai Trương Velora Clock">
+        </a>
     </section>
+    <footer class="nike-footer">
 
 
     <!-- =================================================================== -->

@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: #fff;
+    background-color: #4a423b;
     color: #fff;
 }
 
@@ -272,27 +272,91 @@ img {
     margin: 0 5px;
 }
 
+/* ==========================================================================
+   TIÊU ĐỀ SẢN PHẨM BÁN CHẠY
+   ========================================================================== */
+.title-wrapper {
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 0 48px; /* Căn lề thẳng tắp với Header & Footer */
+}
 
+.section-title {
+    font-size: 28px; /* Chữ to cho nổi bật */
+    font-weight: 700; /* In đậm cực mạnh */
+    color: #111; /* Màu đen sang trọng */
+    margin-bottom: 20px; /* Cách cái băng chuyền ở dưới 1 xíu cho thoáng */
+    text-transform: uppercase; /* Tự động viết hoa toàn bộ */
+}
+/* ==========================================================================
+   HIỆU ỨNG BĂNG CHUYỀN SẢN PHẨM (AUTO-SCROLL MARQUEE)
+   ========================================================================== */
+/* ==========================================================================
+   BĂNG CHUYỀN JS (TỰ ĐỘNG + VUỐT THỦ CÔNG)
+   ========================================================================== */
 .slider-container {
-  width: 100%;
-  max-width: 600px; /* Độ rộng tùy chỉnh */
-  margin: 0 auto;
-  overflow: hidden; /* Cực kỳ quan trọng: Ẩn các item tràn ra ngoài */
-  border: 1px solid #ccc;
-  border-radius: 8px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    overflow-x: auto; /* Bật thanh cuộn ngang ẩn */
+    padding: 20px 0;
+    scroll-behavior: auto; /* Quan trọng: Không dùng smooth để JS reset mượt */
+    scrollbar-width: none; /* Ẩn thanh cuộn (Firefox) */
+}
+
+/* Ẩn thanh cuộn (Chrome, Safari) */
+.slider-container::-webkit-scrollbar {
+    display: none;
 }
 
 .slider-track {
-  display: flex;
-  transition: transform 0.5s ease-in-out; /* Tạo hiệu ứng lướt mượt */
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    /* XÓA SẠCH ANIMATION CŨ Ở ĐÂY */
 }
 
 .product-item {
-  min-width: 100%; /* Mỗi sản phẩm chiếm trọn 1 trang */
-  box-sizing: border-box;
-  padding: 40px 20px;
-  text-align: center;
-  background-color: #f9f9f9;
+    width: 250px; 
+    flex-shrink: 0;
+    box-sizing: border-box;
+    text-align: center;
+    background-color: #fff;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.product-item:hover {
+    transform: translateY(-8px); /* Nhún lên nhẹ khi hover */
+}
+
+.product-item {
+    width: 250px; /* Thu nhỏ sản phẩm lại theo ý em (gốc là 300px+) */
+    flex-shrink: 0;
+    box-sizing: border-box;
+    text-align: center;
+    background-color: #fff;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.product-item:hover {
+    transform: translateY(-8px); /* Nhún nảy nhẹ lên khi trỏ chuột vào để chọn mua */
+}
+.product-info-card h3 {
+    color: #000;
+}
+
+/* Định nghĩa lộ trình chạy băng chuyền */
+@keyframes conveyor {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        /* Trượt sang trái chính xác 50% tổng chiều dài (tức là trượt hết Set 1). 
+           Khi đó Set 2 lấp vào vừa khít, trình duyệt sẽ reset về 0% mà mắt người không nhận ra sự ngắt quãng */
+        transform: translateX(calc(-50% - 10px)); /* Trừ 10px để bù trừ cho cái gap 20px */
+    }
 }
 /* ==========================================================================
    3. SEARCH OVERLAY (UPDATED ANIMATION)
@@ -441,7 +505,7 @@ img {
 .hero-slider {
     position: relative;
     width: 100%;
-    height: 61vh;
+    height: 55vh;
     /* Chiều cao slider */
     background: #000;
     overflow: hidden;
@@ -658,6 +722,87 @@ img {
 @media (max-width: 768px) {
     .featured-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+
+/* ==========================================================================
+   BANNER QUẢNG CÁO KHAI TRƯƠNG
+   ========================================================================== */
+.promo-banner-section {
+    width: 100%;
+    padding: 20px 0 60px 0; /* Cách dải sản phẩm 20px, cách footer 60px */
+    display: flex;
+    justify-content: center;
+    background-color: #4a423b
+}
+
+.banner-container {
+    display: block;
+    width: 100%;
+    max-width: 1920px; /* Trải rộng tối đa theo khung web */
+    padding: 0 48px; /* Căn lề 2 bên khớp với tiêu đề SẢN PHẨM BÁN CHẠY */
+    overflow: hidden;
+}
+
+.banner-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 16px; /* Bo góc banner cho hiện đại */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Đổ bóng cho banner nổi lên */
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Hiệu ứng nhấp nhô nhẹ khi rê chuột vào banner */
+.banner-container img:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* ==========================================================================
+   CSS CHO TIÊU ĐỀ & ICON HOT
+   ========================================================================== */
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Khoảng cách giữa chữ và nút HOT */
+    font-size: 28px; 
+    font-weight: 700; 
+    color: #111; 
+    margin-bottom: 20px; 
+    text-transform: uppercase; 
+}
+
+/* Nút HOT màu đỏ */
+.hot-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #d43f3a; /* Đỏ rực cháy */
+    color: #fff;
+    font-size: 9px;
+    font-weight: 800;
+    padding: 6px 12px;
+    border-radius: 20px; /* Bo góc tròn tròn xịn xò */
+    letter-spacing: 1px;
+    /* Hiệu ứng chớp nháy tỏa nhiệt */
+    animation: pulseHot 1.5s infinite; 
+}
+
+/* Keyframes làm hiệu ứng nhịp đập cho chữ HOT */
+@keyframes pulseHot {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(212, 63, 58, 0.7);
+    }
+    70% {
+        transform: scale(1.05); /* To lên một tí */
+        box-shadow: 0 0 0 10px rgba(212, 63, 58, 0); /* Tỏa hào quang đỏ ra xung quanh rồi biến mất */
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(212, 63, 58, 0);
     }
 }
 
