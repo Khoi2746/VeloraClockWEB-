@@ -98,12 +98,12 @@
             </div>
             <div class="info-group">
                 <div class="label">Full Name</div>
-                <div class="value" th:text="*{firstName} + ' ' + *{surname}"></div>
+                 <div class="value" th:text="*{firstName}"></div>
             </div>
-            <div class="info-group">
-                <div class="label">Date of Birth</div>
-                <div class="value" th:text="*{dobDay} + '/' + *{dobMonth} + '/' + *{dobYear}"></div>
-            </div>
+<div class="info-group">
+    <div class="label">Surname</div>
+    <div class="value" th:text="*{surname}"></div>
+</div>
             <div class="info-group">
                 <div class="label">Shopping Preference</div>
                 <div class="value" th:text="*{shoppingPreference}"></div>
