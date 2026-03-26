@@ -4,38 +4,214 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit Profile - Nike</title>
-    <link rel="stylesheet" th:href="@{/image/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/image/css/edit_profile.css}">
 </head>
 
 <body>
-    <div class="container">
-        <div class="header"><img th:src="@{/image/icon.png}" alt="Nike"></div>
+       <header>
+        <div class="top-bar-wrapper">
+            <div class="inner-content top-bar-content">
+                <div class="jordan-logo">
+                    <img th:src="@{/image/Icon.png}" alt="Icon">
+                </div>
+                <div class="top-right-links">
+                    <div class="nav-actions">
+                        <th:block th:if="${session.loggedInUser != null and session.loggedInUser.roleId == 1}">
+                            <a href="http://localhost:8080/admin/dashboard" style="font-weight: bold;">ADMIN DASHBOARD</a>
+                            <span>|</span>
+                        </th:block>
+                        <a href="#">Find a Store</a>
+                        <span>|</span>
+                        <a href="#">Help</a>
+                        <span>|</span>
+
+                        <th:block th:if="${session.loggedInUser == null}">
+                            <a href="http://localhost:8080/login">Login</a>
+                            <span>|</span>
+                            <a th:href="@{/checkMail}">Sign In</a>
+                        </th:block>
+
+                        <th:block th:unless="${session.loggedInUser == null}">
+                            <div class="user-dropdown">
+                                <div class="user-name-wrapper">
+                                    Hi, <span th:text="${session.loggedInUser.firstName}">Member</span>
+                                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                                </div>
+                                <div class="dropdown-content">
+                                    <a th:href="@{/profile}">Profile Detail</a>
+                                    <hr style="border: 0; border-top: 1px solid #f0f0f0; margin: 0;">
+                                    <a th:href="@{/change-password}">Change Password</a>
+                                    <hr style="border: 0; border-top: 1px solid #f0f0f0; margin: 0;">
+                                    <a th:href="@{/logout}" style="color: #d43f3a !important;">Log Out</a>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div> 
+
+        <nav class="main-nav-wrapper">
+            <div class="inner-content">
+                <a href="http://localhost:8080/home" class="nike-logo">
+                    <img th:src="@{/image/VeloraIcon.jpg}" alt="Velora" style="width: 255px;">
+                </a>
+
+                <div class="nav-links">
+                    <div class="nav-item">
+                        <a href="#">Trang Sản Phẩm</a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-inner">
+                                <div class="dropdown-column">
+                                    <h3>HOT</h3>
+                                    <ul>
+                                        <li><a href="http://localhost:8080/new-arrivals">Sản Phẩm Bán Chạy</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav-actions">
+                    <div class="search-container">
+                        <i class="fa-solid fa-magnifying-glass search-icon-btn"></i>
+                        <input type="text" placeholder="Search">
+                    </div>
+                    <a href="http://localhost:8080/favorites" class="action-icon"><i class="fa-regular fa-heart"></i></a>
+                    <a th:href="@{/customer/orders}" class="action-icon"><i class="fa-solid fa-box"></i></a>
+                    <a href="http://localhost:8080/cart" class="action-icon"><i class="fa-solid fa-bag-shopping"></i></a>
+                </div>
+            </div>
+        </nav>
+    </header>
+  <main class="profile-page-container">
+    <div class="edit-profile-wrapper">
+        <div class="header">
+            <img th:src="@{/image/icon.png}" alt="Nike">
+        </div>
         <h1>Edit Profile</h1>
+        
         <form th:action="@{/profile/edit}" method="POST" th:object="${session.loggedInUser}">
             <input type="hidden" name="email" th:value="*{email}">
             <div class="form-group">
-                <label>Email Address</label>
+                <label class="label">Email Address</label>
                 <input type="text" th:value="*{email}" readonly>
             </div>
+
             <div class="form-group">
-                <label>First Name</label>
+                <label class="label">First Name</label>
                 <input type="text" name="firstName" th:value="*{firstName}" required>
             </div>
+
             <div class="form-group">
-                <label>Surname</label>
-                <input type="text" name="surname" th:value="*{surname}" required>
+                <label class="label">Surname</label>
+                   <input type="text" name="surname" th:value="*{surname}" required>
             </div>
+
             <div class="form-group">
-                <label>Shopping Preference</label>
+                <label class="label">Shopping Preference</label>
                 <select name="shoppingPreference">
                     <option value="Men" th:selected="*{shoppingPreference == 'Men'}">Men</option>
                     <option value="Women" th:selected="*{shoppingPreference == 'Women'}">Women</option>
                 </select>
             </div>
+
             <button type="submit" class="btn-black">Save Changes</button>
         </form>
-        <div class="sub-link-wrapper"><a th:href="@{/profile}" class="sub-link">Cancel</a></div>
-    </div>
-</body>
 
+        <div class="sub-link-wrapper">
+            <a th:href="@{/profile}" class="sub-link">Cancel</a>
+        </div>
+    </div>
+</main>
+            
+            <div class="search-overlay" id="searchOverlay">
+        <div class="search-overlay-content">
+            <div class="search-top-bar">
+                <div class="overlay-logo">
+                    <img th:src="@{/image/icon.png}" alt="Nike" style="width: 60px;">
+                </div>
+                <div class="big-search-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon-big"></i>
+                    <input type="text" placeholder="Search" id="overlaySearchInput">
+                </div>
+                <button class="btn-cancel" id="closeSearch">Cancel</button>
+            </div>
+            
+            <div class="search-suggestions">
+                <div class="suggestion-title">Popular Search Terms</div>
+                <div class="tags-container">
+                    <a href="#" class="search-tag">Air Force 1</a>
+                    <a href="#" class="search-tag">Jordan</a>
+                    <a href="#" class="search-tag">Air Max</a>
+                </div>
+            </div>
+        </div>
+        <div class="overlay-backdrop" id="backdrop"></div>
+    </div>
+
+    <footer class="nike-footer">
+        <div class="footer-container">
+
+            <!-- CỘT 1 -->
+            <div class="footer-column">
+                <h4>Find a Store</h4>
+                <ul>
+                    <li><a href="#">Become a Member</a></li>
+                    <li><a href="#">Sign Up for Email</a></li>
+                    <li><a href="#">Send Us Feedback</a></li>
+                    <li><a href="#">Student Discounts</a></li>
+                </ul>
+            </div>
+
+            <!-- CỘT 2 -->
+            <div class="footer-column">
+                <h4>Get Help</h4>
+                <ul>
+                    <li><a href="#">Order Status</a></li>
+                    <li><a href="#">Delivery</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">Payment Options</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <!-- CỘT 3 -->
+            <div class="footer-column">
+                <h4>About</h4>
+                <ul>
+                    <li><a href="#">News</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Investors</a></li>
+                    <li><a href="#">Sustainability</a></li>
+                </ul>
+            </div>
+
+            <!-- CỘT 4 -->
+            <div class="footer-column">
+                <h4>Social</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 VeloraClock, Inc. All Rights Reserved</span>
+            <div class="footer-links">
+                <a href="#">Guides</a>
+                <a href="#">Terms of Sale</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+</body>
+<script th:src="@{/image/js/profile.js}"></script>
 </html>
