@@ -284,7 +284,7 @@ img {
 .section-title {
     font-size: 28px; /* Chữ to cho nổi bật */
     font-weight: 700; /* In đậm cực mạnh */
-    color: #111; /* Màu đen sang trọng */
+    color: #fff; /* Màu đen sang trọng */
     margin-bottom: 20px; /* Cách cái băng chuyền ở dưới 1 xíu cho thoáng */
     text-transform: uppercase; /* Tự động viết hoa toàn bộ */
 }
@@ -769,7 +769,7 @@ img {
     gap: 12px; /* Khoảng cách giữa chữ và nút HOT */
     font-size: 28px; 
     font-weight: 700; 
-    color: #111; 
+    color: #fff; 
     margin-bottom: 20px; 
     text-transform: uppercase; 
 }
