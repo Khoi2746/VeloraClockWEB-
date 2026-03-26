@@ -51,7 +51,7 @@ img { display: block; width: 100%; }
 .top-bar-content { font-size: 12px; font-weight: 500; }
 .top-right-links { display: flex; gap: 15px; }
 .top-right-links a:hover { color: #757575; }
-.jordan-logo img { width: 24px; height: auto; }
+.jordan-logo img { width: 40px; height: auto; }
 
 /* --- Main Navbar --- */
 .main-nav-wrapper {
@@ -62,7 +62,10 @@ img { display: block; width: 100%; }
     position: relative;
 }
 
-.nike-logo img { width: 60px; height: auto; }
+.nike-logo img {
+    width: 255px;
+    height: auto;
+}
 
 .nav-links {
     display: flex;
