@@ -131,8 +131,8 @@
     <div th:if="${not #lists.isEmpty(favorites)}" class="fav-grid">
         <div th:each="fav : ${favorites}" class="product-card">
             <div class="card-img">
-                <img th:src="@{${fav.product.imageUrl}}" alt="Product Image">
-</div>
+              <img th:src="${#strings.arraySplit(fav.product.imageUrl, ',')[0].trim()}" alt="Product Image">
+        </div>
             
             <div class="card-info">
                 <div class="product-name" th:text="${fav.product.name}">Nike Air Jordan</div>
@@ -163,13 +163,13 @@
         gap: 20px;
         margin-top: 20px;
     }
-    .product-card {
+    /* .product-card {
         border: 1px solid #e5e5e5;
         padding: 10px;
-    }
+    } */
     .product-card img {
         width: 200px;
-        height: 270px;
+        height: 200px;
     }
     .card-info { margin: 10px 0; }
     .product-name { font-weight: bold; }
