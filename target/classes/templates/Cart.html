@@ -14,10 +14,9 @@
         <div class="top-bar-wrapper">
             <div class="inner-content top-bar-content">
                 <div class="jordan-logo">
-                    <img th:src="@{/image/Icon.png}" alt="Icon">
+                    <img src="image/Icon.png" alt="Icon">
                 </div>
                 <div class="top-right-links">
-                    <div class="nav-actions">
                     <th:block th:if="${session.loggedInUser != null and session.loggedInUser.roleId == 1}">
                         <a href="http://localhost:8080/admin/dashboard" style="font-weight: bold;">ADMIN DASHBOARD</a>
                     </th:block>|
@@ -50,26 +49,27 @@
                 </div>
             </div>
         </div>
-<nav class="main-nav-wrapper">
+
+        <nav class="main-nav-wrapper">
             <div class="inner-content">
                 <a href="http://localhost:8080/home" class="nike-logo">
-                     <img th:src="@{/image/VeloraIcon.jpg}" alt="Icon">
+                    <img src="image/VeloraIcon.jpg" alt="Velora">
                 </a>
 
                 <div class="nav-links">
 
                     <div class="nav-item">
-                        <a href="#">Trang Sản Phẩm</a>
+                        <a href="#">New & Featured</a>
                         <div class="dropdown-menu">
                             <div class="dropdown-inner">
                                 <div class="dropdown-column">
-                                    <h3>HOT</h3>
+                                    <h3>Featured</h3>
                                     <ul>
-                                        <li><a href="http://localhost:8080/new-arrivals">Sản Phẩm Bán Chạy</a></li>
+                                        <li><a href="http://localhost:8080/new-arrivals">New Arrivals</a></li>
                                     </ul>
                                 </div>
                             </div>
-</div>
+                        </div>
                     </div>
                 </div>
                 <div class="nav-backdrop"></div>
@@ -94,6 +94,8 @@
                 </div>
             </div>
         </nav>
+
+        
     </header>
     <!-- =================================================================== -->
     <!-- Search Overlay -->
