@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management | Nike Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ================= RESET & BASIC ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* ================= SIDEBAR (GIỮ NGUYÊN) ================= */
+        .sidebar {
+            width: 260px;
+            background-color: #111;
+            color: #fff;
+            padding: 30px 20px;
+            position: fixed;
+            height: 100%;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 50px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #333;
+        }
+
+        .logo-area img {
+            width: 50px;
+            filter: invert(1);
+        }
+
+        .logo-area h2 {
+            font-size: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .menu-items li {
+            margin-bottom: 15px;
+        }
+
+        /* Trạng thái mặc định cho tất cả các ô: Tối và chữ xám */
+        .menu-items a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #aaa;
+            /* Chữ xám tối */
+            background-color: transparent;
+            /* Nền trong suốt (tối theo sidebar) */
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        /* Hiệu ứng HOVER: Khi đưa chuột vào bất kỳ ô nào thì nó mới sáng lên */
+        .menu-items a:hover {
+            background-color: #333;
+            /* Nền xám nhạt hiện lên */
+            color: #fff;
+            /* Chữ trắng tinh */
+        }
+
+        /* Icon cũng sẽ trắng theo khi hover */
+        .menu-items a:hover i {
+            color: #fff;
+        }
+
+        .logout-btn {
+            color: #d43f3a;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .bottom-link {
+            color: #aaa;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.3s;
+            font-size: 14px;
+        }
+
+        .bottom-link:hover {
+            color: #fff;
+        }
+
+        /* ================= MAIN CONTENT ================= */
+        .main-content {
+            margin-left: 260px;
+            padding: 40px 60px;
+            flex: 1;
+            width: 100%;
+        }
+
+        .header-title {
+            margin-bottom: 30px;
+        }
+
+        .header-title h1 {
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        /* LAYOUT 2 CỘT: FORM & TABLE */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            /* Cột Form 350px, Cột Bảng chiếm phần còn lại */
+            gap: 30px;
+            align-items: start;
+        }
+
+        /* --- 1. FORM CARD --- */
+        .form-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 40px;
+            /* Dính form khi cuộn trang */
+        }
+
+        .form-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #111;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background-color: #111;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: opacity 0.3s;
+        }
+
+        .btn-submit:hover {
+            opacity: 0.8;
+        }
+
+        .btn-cancel {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #757575;
+            text-decoration: underline;
+        }
+
+        /* --- 2. TABLE CARD --- */
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            /* Bo góc cho table */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #f9f9f9;
+            border-bottom: 2px solid #eee;
+        }
+
+        th {
+            padding: 15px 20px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 700;
+            color: #555;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            color: #111;
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: #fafafa;
+        }
+
+        /* Role Badge */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-admin {
+            background-color: #111;
+            color: white;
+        }
+
+        .badge-user {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        /* Action Buttons */
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-edit {
+            background-color: #f5f5f5;
+            color: #111;
+        }
+
+        .btn-delete {
+            background-color: #fff0f0;
+            color: #d43f3a;
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="logo-area">
+                <img src="/image/icon.png" alt="Nike Logo">
+                <h2>Admin Dashboard</h2>
+            </div>
+
+            <ul class="menu-items">
+                <li><a th:href="@{/admin/dashboard}" class="active"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a th:href="@{/admin/products}"><i class="fa-solid fa-box-open"></i> Products</a></li>
+                <li><a th:href="@{/admin/user/management}"><i class="fa-solid fa-users"></i> Users</a></li>
+                <li><a th:href="@{/admin/statistics}"><i class="fa-solid fa-chart-line"></i> Statistics</a></li>
+                <li><a th:href="@{/admin/orders}"><i class="fa-solid fa-file-invoice-dollar"></i> Orders</a></li>
+            </ul>
+        </div>
+
+        <div class="sidebar-bottom">
+            <a th:href="@{/home}" class="bottom-link"><i class="fa-solid fa-house"></i> Return HomePage</a>
+            <a th:href="@{/logout}" class="bottom-link" style="color: #d43f3a;"><i
+                    class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="header-title">
+            <h1>User Management</h1>
+        </div>
+
+        <div class="content-grid">
+
+            <div class="form-card">
+                <div class="form-title" th:text="${user.id == null ? 'Add New User' : 'Edit User'}">Add New User</div>
+
+                <form th:action="@{/admin/user/save}" method="post" th:object="${user}">
+                    <input type="hidden" th:field="*{id}">
+
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" th:field="*{firstName}" placeholder="Ex: John" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" th:field="*{surname}" placeholder="Ex: Doe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" th:field="*{email}" placeholder="john@nike.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="Leave blank to keep current">
+                        <small style="color: #999; font-size: 11px; display: block; margin-top: 4px;"
+                            th:if="${user.id != null}">
+                            Only enter if you want to change it.
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Role</label>
+                        <select th:field="*{roleId}">
+                            <option value="2">User (Customer)</option>
+                            <option value="1">Admin (Manager)</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        <i class="fa-solid fa-check"></i> Save User
+                    </button>
+
+                    <a th:if="${user.id != null}" th:href="@{/admin/user/management}" class="btn-cancel">Cancel Edit</a>
+                </form>
+            </div>
+
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="u : ${users}">
+                            <td th:text="'#' + ${u.id}">#1</td>
+                            <td style="font-weight: 500;" th:text="${u.firstName + ' ' + u.surname}">John Doe</td>
+                            <td th:text="${u.email}">john@example.com</td>
+
+                            <td>
+                                <span class="badge badge-admin" th:if="${u.roleId == 1}">Admin</span>
+                                <span class="badge badge-user" th:if="${u.roleId != 1}">User</span>
+                            </td>
+
+                            <td class="action-btns">
+                                <a th:href="@{/admin/user/edit/{id}(id=${u.id})}" class="btn-icon btn-edit"
+                                    title="Edit">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+
+                                <form th:action="@{/admin/user/delete/{id}(id=${u.id})}" method="post"
+                                    onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                    <button type="submit" class="btn-icon btn-delete" title="Delete">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(users)}">
+                            <td colspan="5" style="text-align: center; padding: 30px; color: #999;">
+                                No users found in database.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+</body>
+
+</html>

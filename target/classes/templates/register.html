@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Us - Nike Member Profile</title>
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/image/icon.png}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* 1. RESET & BASIC SETUP */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+        body { background-color: #fff; color: #111; display: flex; justify-content: center; padding-top: 40px; padding-bottom: 40px; }
+        .register-container { width: 100%; max-width: 480px; padding: 28px; }
+        
+        /* LOGO */
+        .logos { display: flex; gap: 20px; margin-bottom: 30px; }
+        .logos img { height: 24px; width: auto; }
+
+        /* HEADER */
+        .header-text h1 { font-size: 24px; font-weight: 700; line-height: 28px; margin-bottom: 16px; max-width: 80%; }
+        .sub-text { font-size: 14px; color: #111; margin-bottom: 24px; }
+        .sub-text a { text-decoration: underline; color: #757575; margin-left: 5px; cursor: pointer; }
+
+        /* FORM */
+        .form-group { margin-bottom: 20px; position: relative; }
+        input, select { width: 100%; padding: 14px 16px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 16px; outline: none; transition: border-color 0.2s; color: #111; }
+        input:focus, select:focus { border-color: #111; }
+
+        /* ERROR STYLES */
+        .input-error { border-color: #d43f3a !important; } /* Viền đỏ khi lỗi */
+        .error-text { color: #d43f3a; font-size: 12px; margin-top: 5px; } /* Chữ đỏ */
+        
+        .row-double { display: flex; gap: 16px; }
+        .row-double .form-group { flex: 1; }
+        
+        .helper-text { font-size: 12px; color: #757575; margin-top: 6px; display: flex; justify-content: space-between; }
+        
+        .password-toggle { position: absolute; right: 15px; top: 15px; cursor: pointer; color: #757575; font-size: 18px; }
+
+        /* DOB */
+        .dob-label { font-size: 14px; color: #757575; margin-bottom: 8px; }
+        .dob-container { display: flex; gap: 10px; }
+        .dob-container input { text-align: center; }
+        .dob-note { font-size: 11px; color: #757575; margin-top: 8px; text-align: center; margin-bottom: 20px; }
+
+        /* CHECKBOX */
+        .checkbox-group { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+        .checkbox-group input[type="checkbox"] { width: 20px; height: 20px; margin-top: 2px; accent-color: #111; cursor: pointer; }
+        .checkbox-group label { font-size: 12px; color: #757575; line-height: 1.5; cursor: pointer; }
+        .checkbox-group a { color: #111; text-decoration: underline; font-weight: 600; }
+
+        /* BUTTON */
+        .btn-submit { width: 100%; background-color: #111; color: #fff; padding: 16px; font-size: 16px; font-weight: 700; border: none; border-radius: 30px; cursor: pointer; margin-top: 10px; }
+        .btn-submit:hover { background-color: #333; }
+    </style>
+</head>
+<body>
+
+    <div class="register-container">
+        <div class="logos">
+            <img src="/image/icon.png" alt="Nike Logo"> 
+            <img src="/image/jordanIcon.png" alt="Jordan Logo"> 
+        </div>
+
+        <div class="header-text">
+            <h1>Now let's make you a Nike Member.</h1>
+            <p class="sub-text">
+                We've sent a code to <br> 
+                <strong th:text="${registerForm.email != null} ? ${registerForm.email} : 'your-email@gmail.com'">
+                </strong> 
+                <a th:href="@{/checkMail}">Edit</a>
+            </p>
+        </div>
+
+        <form th:action="@{/register}" th:object="${registerForm}" method="POST">
+            
+            <input type="hidden" th:field="*{email}">
+
+            <div class="form-group">
+                <input type="text" placeholder="Code*" 
+                       th:field="*{code}"
+                       th:classappend="${#fields.hasErrors('code')} ? 'input-error' : ''">
+                
+                <div class="error-text" th:if="${#fields.hasErrors('code')}" th:errors="*{code}"></div>
+                
+                <div class="helper-text">
+                    <span></span> <span>Resend code in 8s</span>
+                </div>
+            </div>
+
+            <div class="row-double">
+                <div class="form-group">
+                    <input type="text" placeholder="First Name*" 
+                           th:field="*{firstName}"
+                           th:classappend="${#fields.hasErrors('firstName')} ? 'input-error' : ''">
+                    <div class="error-text" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="Surname*" 
+                           th:field="*{surname}"
+                           th:classappend="${#fields.hasErrors('surname')} ? 'input-error' : ''">
+                    <div class="error-text" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="password" id="password" placeholder="Password*"
+                       th:field="*{password}"
+                       th:classappend="${#fields.hasErrors('password')} ? 'input-error' : ''">
+                <i class="fa-regular fa-eye password-toggle" onclick="togglePassword()"></i>
+                
+                <div class="error-text" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+
+                <div class="helper-text">
+                    <span style="display: block; width: 100%;">× Minimum of 8 characters</span>
+                </div>
+                <div class="helper-text">
+                    <span>× Uppercase, lowercase letters and one number</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <select th:field="*{shoppingPreference}" 
+                        th:classappend="${#fields.hasErrors('shoppingPreference')} ? 'input-error' : ''">
+                    <option value="" disabled selected>Shopping Preference*</option>
+                    <option value="men">Men's</option>
+                    <option value="women">Women's</option>
+                </select>
+                <div class="error-text" th:if="${#fields.hasErrors('shoppingPreference')}" th:errors="*{shoppingPreference}"></div>
+            </div>
+
+            <div class="dob-label">Date of Birth</div>
+            <div class="dob-container">
+                <input type="text" placeholder="Day*" th:field="*{dobDay}" th:classappend="${#fields.hasErrors('dobDay')} ? 'input-error' : ''">
+                <input type="text" placeholder="Month*" th:field="*{dobMonth}" th:classappend="${#fields.hasErrors('dobMonth')} ? 'input-error' : ''">
+                <input type="text" placeholder="Year*" th:field="*{dobYear}" th:classappend="${#fields.hasErrors('dobYear')} ? 'input-error' : ''">
+            </div>
+            <div class="error-text" th:if="${#fields.hasErrors('dobDay')}" th:text="'Date required'"></div>
+            
+            <p class="dob-note">Get a Nike Member Reward on your birthday.</p>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="signup-email" th:field="*{emailSignup}">
+                <label for="signup-email">Sign up for emails to get updates from Nike on products, offers and your Member benefits.</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="terms" th:field="*{agreeTerms}">
+                <label for="terms">I agree to Nike's <a href="#">Privacy Policy</a> and <a href="#">Terms of Use</a>.</label>
+            </div>
+            <div class="error-text" th:if="${#fields.hasErrors('agreeTerms')}" th:errors="*{agreeTerms}"></div>
+
+            <button type="submit" class="btn-submit">Create Account</button>
+
+        </form>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const icon = document.querySelector('.password-toggle');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
+
+</body>
+</html>
