@@ -4,16 +4,24 @@
     <meta charset="UTF-8">
     <title>Lịch sử đơn hàng | Nike Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link rel="stylesheet" th:href="@{/image/css/index.css}">
     <style>
         /* --- NIKE STYLE CSS --- */
-        body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background-color: #f5f5f5; margin: 0; padding: 40px 0; }
+        body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: #fff;
+    margin: 0;
+    padding: 0; /* ❌ bỏ 40px */
+}
+
+
         
         .history-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+    max-width: 800px;
+    margin: 40px auto; /* 👈 tạo khoảng cách */
+    padding: 0 20px;
+    color: black;
+}
 
         .page-title { 
             font-size: 24px; 
@@ -27,15 +35,13 @@
 
         /* Card đơn hàng */
         .order-card {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
-            border-left: 5px solid #ccc; /* Màu mặc định */
-            position: relative;
-        }
+    background: white;
+    border-radius: 12px; /* bo tròn hơn */
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08); /* 👈 nổi hơn */
+    transition: transform 0.2s;
+}
 
         .order-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
@@ -54,7 +60,11 @@
             padding-bottom: 10px;
         }
 
-        .order-id { font-weight: 700; font-size: 16px; }
+        .order-id {
+    font-weight: 700;
+    font-size: 16px;
+    color: #050404; /* 👈 chữ đen */
+}
         .order-date { color: #757575; font-size: 14px; }
 
         .card-body {
@@ -109,11 +119,208 @@
         
         .back-link { display: inline-block; margin-top: 30px; text-decoration: none; color: #111; font-weight: 600;}
         .back-link:hover { text-decoration: underline; }
+
+        /* Footer Styles */
+        .nike-footer {
+            background-color: #111;
+            color: #fff;
+            padding: 40px 20px 20px;
+            margin-top: 50px;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 20px;
+        }
+
+        .footer-column h4 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-column li {
+            margin-bottom: 8px;
+        }
+
+        .footer-column a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: #fff;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            color: #ccc;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 30px auto 0;
+            flex-wrap: wrap;
+        }
+
+        .footer-bottom span {
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 12px;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                flex-direction: column;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+        }
     </style>
 </head>
 <body>
+    <header>
+        <div class="top-bar-wrapper">
+            <div class="inner-content top-bar-content">
+                <div class="jordan-logo">
+                    <img th:src="@{/image/Icon.png}" alt="Icon">
+                </div>
+                <div class="top-right-links">
+                    <div class="nav-actions">
+                    <th:block th:if="${session.loggedInUser != null and session.loggedInUser.roleId == 1}">
+                        <a href="http://localhost:8080/admin/dashboard" style="font-weight: bold;">ADMIN DASHBOARD</a>
+                    </th:block>|
+                    <a href="#">Find a Store</a>
+                    <span>|</span>
+                    <a href="#">Help</a>
+                    <span>|</span>
 
+                    <th:block th:if="${session.loggedInUser == null}">
+                        <a href="http://localhost:8080/login">Login</a>
+                        <span>|</span>
+                        <a th:href="@{/checkMail}">Sign In</a>
+                    </th:block>
+
+                    <th:block th:unless="${session.loggedInUser == null}">
+                        <div class="user-dropdown">
+                            <div class="user-name-wrapper">
+                                Hi, <span th:text="${session.loggedInUser.firstName}">Member</span>
+                                <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                            </div>
+                            <div class="dropdown-content">
+                                <a th:href="@{/profile}">Profile Detail</a>
+                                <hr style="border: 0; border-top: 1px solid #f0f0f0; margin: 0;">
+                                <a th:href="@{/change-password}">Change Password</a>
+                                <hr style="border: 0; border-top: 1px solid #f0f0f0; margin: 0;">
+                                <a th:href="@{/logout}" style="color: #d43f3a !important;">Log Out</a>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+<nav class="main-nav-wrapper">
+            <div class="inner-content">
+                <a href="http://localhost:8080/home" class="nike-logo">
+                     <img th:src="@{/image/VeloraIcon.jpg}" alt="Icon">
+                </a>
+
+                <div class="nav-links">
+
+                    <div class="nav-item">
+                        <a href="#">Trang Sản Phẩm</a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-inner">
+                                <div class="dropdown-column">
+                                    <h3>HOT</h3>
+                                    <ul>
+                                        <li><a href="http://localhost:8080/new-arrivals">Sản Phẩm Bán Chạy</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav-backdrop"></div>
+
+                <div class="nav-actions">
+                    <div class="search-container">
+                        <i class="fa-solid fa-magnifying-glass search-icon-btn"></i>
+                        <input type="text" placeholder="Search">
+                    </div>
+
+                    <a href="http://localhost:8080/favorites" class="action-icon">
+                        <i class="fa-regular fa-heart"></i>
+                    </a>
+
+                    <a th:href="@{/customer/orders}" class="action-icon" title="Đơn hàng của tôi">
+                        <i class="fa-solid fa-box"></i>
+                    </a>
+
+                    <a href="http://localhost:8080/cart" class="action-icon">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
     <div class="history-container">
+        <br>
+        <br>
         <h2 class="page-title"><i class="fa-solid fa-box"></i> Đơn hàng của tôi</h2>
 
         <div th:if="${#lists.isEmpty(orders)}" class="empty-state">
@@ -150,6 +357,65 @@
 
         <a href="/" class="back-link"><i class="fa-solid fa-chevron-left"></i> Quay lại trang chủ</a>
     </div>
+<footer class="nike-footer">
+        <div class="footer-container">
 
+            <!-- CỘT 1 -->
+            <div class="footer-column">
+                <h4>Find a Store</h4>
+                <ul>
+                    <li><a href="#">Become a Member</a></li>
+                    <li><a href="#">Sign Up for Email</a></li>
+                    <li><a href="#">Send Us Feedback</a></li>
+                    <li><a href="#">Student Discounts</a></li>
+                </ul>
+            </div>
+
+            <!-- CỘT 2 -->
+            <div class="footer-column">
+                <h4>Get Help</h4>
+                <ul>
+                    <li><a href="#">Order Status</a></li>
+                    <li><a href="#">Delivery</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">Payment Options</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <!-- CỘT 3 -->
+            <div class="footer-column">
+                <h4>About</h4>
+                <ul>
+                    <li><a href="#">News</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Investors</a></li>
+                    <li><a href="#">Sustainability</a></li>
+                </ul>
+            </div>
+
+            <!-- CỘT 4 -->
+            <div class="footer-column">
+                <h4>Social</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 VeloraClock, Inc. All Rights Reserved</span>
+            <div class="footer-links">
+                <a href="#">Guides</a>
+                <a href="#">Terms of Sale</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
