@@ -55,7 +55,7 @@ public class ShoppingController {
         model.addAttribute("subtotal", totalAmount);
         model.addAttribute("total", totalAmount);
 
-        return "cart"; 
+        return "cart";
     }
 
     // =========================================================
@@ -63,30 +63,32 @@ public class ShoppingController {
     // =========================================================
     @GetMapping("/cart/update/{id}/{action}")
     public String updateQuantity(@PathVariable("id") Long cartItemId,
-                                 @PathVariable("action") String action,
-                                 HttpSession session) {
-        
+            @PathVariable("action") String action,
+            HttpSession session) {
+
         User user = (User) session.getAttribute("loggedInUser");
-        if (user == null) return "redirect:/login";
+        if (user == null)
+            return "redirect:/login";
 
         // Tìm dòng trong giỏ hàng cần sửa
         CartItem item = cartItemRepository.findById(cartItemId).orElse(null);
 
         // Chỉ cho phép sửa nếu item tồn tại và thuộc về User đang đăng nhập (bảo mật)
         if (item != null && item.getUser().getId().equals(user.getId())) {
-            
+
             // Logic TĂNG
             if ("increase".equals(action)) {
                 item.setQuantity(item.getQuantity() + 1);
                 cartItemRepository.save(item);
-            } 
+            }
             // Logic GIẢM
             else if ("decrease".equals(action)) {
                 if (item.getQuantity() > 1) {
                     item.setQuantity(item.getQuantity() - 1);
                     cartItemRepository.save(item);
                 }
-                // Nếu đang là 1 mà bấm giảm thì giữ nguyên (hoặc em có thể gọi delete để xóa luôn)
+                // Nếu đang là 1 mà bấm giảm thì giữ nguyên (hoặc em có thể gọi delete để xóa
+                // luôn)
             }
         }
 
@@ -99,11 +101,12 @@ public class ShoppingController {
     // =========================================================
     @PostMapping("/cart/add")
     public String addToCart(@RequestParam("productId") Long productId,
-                            @RequestParam("quantity") int quantity,
-                            HttpSession session) {
-        
+            @RequestParam("quantity") int quantity,
+            HttpSession session) {
+
         User user = (User) session.getAttribute("loggedInUser");
-        if (user == null) return "redirect:/login";
+        if (user == null)
+            return "redirect:/login";
 
         Product product = productRepository.findById(productId).orElse(null);
         if (product != null) {
@@ -120,7 +123,7 @@ public class ShoppingController {
                 cartItemRepository.save(newItem);
             }
         }
-        return "redirect:/cart"; 
+        return "redirect:/cart";
     }
 
     // =========================================================
@@ -129,14 +132,15 @@ public class ShoppingController {
     @PostMapping("/cart/remove")
     public String removeFromCart(@RequestParam("cartItemId") Long cartItemId, HttpSession session) {
         User user = (User) session.getAttribute("loggedInUser");
-        if (user == null) return "redirect:/login";
+        if (user == null)
+            return "redirect:/login";
 
         cartItemRepository.findById(cartItemId).ifPresent(item -> {
             if (item.getUser().getId().equals(user.getId())) {
                 cartItemRepository.delete(item);
             }
         });
-        return "redirect:/cart"; 
+        return "redirect:/cart";
     }
 
     // =========================================================
@@ -146,7 +150,8 @@ public class ShoppingController {
     @PostMapping("/cart/checkout")
     public String checkout(HttpSession session) {
         User user = (User) session.getAttribute("loggedInUser");
-        if (user == null) return "redirect:/login";
+        if (user == null)
+            return "redirect:/login";
 
         // Logic checkout: Tạo đơn hàng (Order) -> Lưu OrderDetails -> Xóa giỏ hàng
         // Tạm thời em đang để xóa giỏ hàng
@@ -159,7 +164,8 @@ public class ShoppingController {
     @GetMapping("/favorites")
     public String viewFavorites(HttpSession session, Model model) {
         User user = (User) session.getAttribute("loggedInUser");
-        if (user == null) return "redirect:/login";
+        if (user == null)
+            return "redirect:/login";
 
         List<Favorite> favorites = favoriteRepository.findByUser(user);
         model.addAttribute("favorites", favorites);
@@ -169,7 +175,8 @@ public class ShoppingController {
     @PostMapping("/favorites/toggle")
     public String toggleFavorite(@RequestParam("productId") Long productId, HttpSession session) {
         User user = (User) session.getAttribute("loggedInUser");
-        if (user == null) return "redirect:/login";
+        if (user == null)
+            return "redirect:/login";
 
         List<Favorite> existList = favoriteRepository.findByUserAndProduct_Id(user, productId);
         if (!existList.isEmpty()) {
@@ -183,6 +190,6 @@ public class ShoppingController {
                 favoriteRepository.save(newFav);
             }
         }
-        return "redirect:/favorites"; 
+        return "redirect:/favorites";
     }
 }

@@ -1,37 +1,45 @@
 package com.example.asm1.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 
 @Entity
-@Data
-@Table(name = "Order_Details") // Trùng tên với bảng trong SQL
-public class OrderDetails { 
+@Table(name = "Order_Details")
+public class OrderDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private Order order; // Thuộc đơn hàng nào
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    private Product product; // Mua sản phẩm nào
+    private Product product;
 
-    private Integer quantity; // Số lượng
-    private Double price; // Giá lúc mua
+    private Integer quantity;
+    private Double price;
 
-    // ... Khai báo biến xong thì paste đoạn này vào ...
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public Product getProduct() {
+        return product;
     }
 
     public void setProduct(Product product) {
@@ -53,8 +61,4 @@ public class OrderDetails {
     public void setPrice(Double price) {
         this.price = price;
     }
-    
-    public Product getProduct() {
-        return product;
-    }
- }
+}
