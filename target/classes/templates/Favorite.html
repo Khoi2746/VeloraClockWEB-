@@ -16,13 +16,20 @@
                     <img src="image/Icon.png" alt="Icon">
                 </div>
                 <div class="top-right-links">
-                    <th:block th:if="${session.loggedInUser != null and session.loggedInUser.roleId == 1}">
-                            <a href="http://localhost:8080/admin/dashboard" style="font-weight: bold;">ADMIN DASHBOARD</a>
-                    </th:block>|
-                    <a href="#">Find a Store</a>
-                    <span>|</span>
-                    <a href="#">Help</a>
-                    <span>|</span>
+                    <div class="nav-actions">
+                        <th:block th:if="${session.loggedInUser != null and session.loggedInUser.roleId == 1}">
+                            <a href="http://localhost:8080/admin/dashboard" style="font-weight: bold;">ADMIN
+                                DASHBOARD</a>
+                            <span class="divider">|</span>
+                        </th:block>
+
+                        <a href="#">Find a Store</a>
+                        <span class="divider">|</span>
+
+                        <a href="#">Help</a>
+                        <span class="divider">|</span>
+
+                    </div>
 
                     <th:block th:if="${session.loggedInUser == null}">
                         <a href="http://localhost:8080/login">Login</a>
@@ -61,7 +68,7 @@
                         <a href="#">New & Featured</a>
                         <div class="dropdown-menu">
                             <div class="dropdown-inner">
-<div class="dropdown-column">
+                                <div class="dropdown-column">
                                     <h3>Featured</h3>
                                     <ul>
                                         <li><a href="http://localhost:8080/new-arrivals">New Arrivals</a></li>

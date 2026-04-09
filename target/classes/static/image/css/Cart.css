@@ -24,6 +24,14 @@ a:hover { color: #757575; }
 ul { list-style: none; }
 img { display: block; width: 100%; }
 
+.nav-actions {
+    color: #ffffff !important; /* Ép tất cả chữ thuần và dấu | thành màu trắng */
+}
+
+.nav-actions span {
+    color: #ffffff !important; /* Đảm bảo các thẻ span chứa dấu | cũng trắng */
+}
+
 /* Tiện ích Layout chung */
 .inner-content {
     max-width: 1920px;
