@@ -23,9 +23,8 @@ public class User {
 
     private String surname;
 
-    @Column(name = "shopping_preference")
-    private String shoppingPreference;
-
+   @Column(name = "gender")
+private String gender;
     @Column(name = "dob_day")
     private Integer dobDay;
 

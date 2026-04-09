@@ -9,11 +9,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+
 // Sửa RegisterForm -> User
+@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    // Sửa kiểu trả về: RegisterForm -> User
     User findByEmail(String email);
 
     @Transactional
@@ -23,8 +23,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE Users SET first_name = :fname, surname = :sname, shopping_preference = :pref WHERE email = :email", nativeQuery = true)
-    void updateProfile(@Param("fname") String fname, @Param("sname") String sname, @Param("pref") String pref, @Param("email") String email);
-
-    
+    @Query(value = "UPDATE Users SET first_name = :fname, surname = :sname, gender = :gender WHERE email = :email", nativeQuery = true)
+    void updateProfile(@Param("fname") String fname,
+                       @Param("sname") String sname,
+                       @Param("gender") String gender,
+                       @Param("email") String email);
 }

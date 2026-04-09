@@ -65,7 +65,7 @@ public class AuthController {
             newUser.setPassword(registerForm.getPassword());
             newUser.setFirstName(registerForm.getFirstName());
             newUser.setSurname(registerForm.getSurname());
-            newUser.setShoppingPreference(registerForm.getShoppingPreference());
+           newUser.setGender(registerForm.getGender());
             
             // Map ngày sinh (QUAN TRỌNG: code cũ của em thiếu đoạn này)
             newUser.setDobDay(registerForm.getDobDay());
@@ -192,34 +192,26 @@ public class AuthController {
         return "edit-profile";
     }
 
-    @PostMapping("/profile/edit")
-    public String processEditProfile(
-            @RequestParam("firstName") String firstName,
-            @RequestParam("surname") String surname,
-            @RequestParam("shoppingPreference") String shoppingPreference,
-            HttpSession session) {
+   @PostMapping("/profile/edit")
+public String processEditProfile(
+        @RequestParam("firstName") String firstName,
+        @RequestParam("surname") String surname,
+        @RequestParam("gender") String gender,
+        HttpSession session) {
 
-        // Ép kiểu về User
-        User sessionUser = (User) session.getAttribute("loggedInUser");
-        if (sessionUser == null) return "redirect:/login";
+    User sessionUser = (User) session.getAttribute("loggedInUser");
+    if (sessionUser == null) return "redirect:/login";
 
-        try {
-            userRepository.updateProfile(firstName, surname, shoppingPreference, sessionUser.getEmail());
+    try {
+        userRepository.updateProfile(firstName, surname, gender, sessionUser.getEmail());
 
-            // Tìm lại User mới nhất từ DB
-            User updatedUser = userRepository.findByEmail(sessionUser.getEmail());
+        User updatedUser = userRepository.findByEmail(sessionUser.getEmail());
+        session.setAttribute("loggedInUser", updatedUser);
 
-            if (updatedUser != null) {
-                // Nếu User Entity có trường code (dù là @Transient), hãy set lại nếu cần giữ OTP cũ
-                // updatedUser.setCode(sessionUser.getCode()); 
-                session.setAttribute("loggedInUser", updatedUser);
-            }
-
-            System.out.println("Cập nhật thành công cho: " + firstName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return "redirect:/profile";
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+
+    return "redirect:/profile";
+}
 }

@@ -50,7 +50,7 @@ public class UserRestController {
             existingUser.setFirstName(userDetails.getFirstName());
             existingUser.setSurname(userDetails.getSurname());
             existingUser.setEmail(userDetails.getEmail());
-            existingUser.setShoppingPreference(userDetails.getShoppingPreference());
+existingUser.setGender(userDetails.getGender());
             existingUser.setDobDay(userDetails.getDobDay());
             existingUser.setDobMonth(userDetails.getDobMonth());
             existingUser.setDobYear(userDetails.getDobYear());

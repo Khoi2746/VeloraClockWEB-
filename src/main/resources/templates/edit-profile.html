@@ -110,13 +110,14 @@
                    <input type="text" name="surname" th:value="*{surname}" required>
             </div>
 
-            <div class="form-group">
-                <label class="label">Shopping Preference</label>
-                <select name="shoppingPreference">
-                    <option value="Men" th:selected="*{shoppingPreference == 'Men'}">Men</option>
-                    <option value="Women" th:selected="*{shoppingPreference == 'Women'}">Women</option>
-                </select>
-            </div>
+ <div class="form-group">
+    <label class="label">Gender</label>
+    <select name="gender">
+        <option value="">-- Select Gender --</option>
+        <option value="Nam" th:selected="${session.loggedInUser.gender == 'Nam'}">Nam</option>
+        <option value="Nữ" th:selected="${session.loggedInUser.gender == 'Nữ'}">Nữ</option>
+    </select>
+</div>
 
             <button type="submit" class="btn-black">Save Changes</button>
         </form>

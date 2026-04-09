@@ -25,8 +25,8 @@ public class RegisterForm {
     )
     private String password;
 
-    @NotBlank(message = "Please select a preference")
-    private String shoppingPreference;
+@NotBlank(message = "Please select gender")
+private String gender;
 
     @NotNull
     private Integer dobDay;
