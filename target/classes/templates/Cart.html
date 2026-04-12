@@ -148,9 +148,9 @@
 
                 <div th:each="item : ${cartItems}" class="cart-item">
 
-                    <div class="item-img">
-                        <img th:src="@{${item.product.imageUrl}}" alt="Product Image">
-                    </div>
+                   <div class="item-img">
+    <img th:src="@{${#strings.trim(#strings.arraySplit(item.product.imageUrl, ',')[0])}}" alt="Product Image">
+</div>
 
                     <div class="item-details">
                         <div class="item-name" th:text="${item.product.name}">Tên sản phẩm</div>
